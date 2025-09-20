@@ -29,11 +29,11 @@ use arrow::datatypes::{
 use datafusion_common::cast::{
     as_fixed_size_list_array, as_generic_list_array, as_int64_array,
 };
-use datafusion_common::{exec_err, internal_datafusion_err, plan_err, Result};
+use datafusion_common::{exec_err, plan_err, Result};
 use datafusion_expr::{
     ColumnarValue, Documentation, ScalarUDFImpl, Signature, Volatility,
 };
-use datafusion_functions::{downcast_arg, downcast_named_arg};
+use datafusion_functions::downcast_arg;
 use datafusion_macros::user_doc;
 use std::any::Any;
 use std::sync::Arc;
@@ -149,7 +149,7 @@ pub fn array_length_inner(args: &[ArrayRef]) -> Result<ArrayRef> {
         List(_) => general_array_length::<i32>(args),
         LargeList(_) => general_array_length::<i64>(args),
         FixedSizeList(_, _) => fixed_size_array_length(args),
-        array_type => exec_err!("array_length does not support type '{array_type:?}'"),
+        array_type => exec_err!("array_length does not support type '{array_type}'"),
     }
 }
 
